@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\APIException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,6 +35,10 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (UrlException $e, $request) {
+            return response()->json($e->getErrorBody(), $e->getStatus());
+        });
+
         $this->reportable(function (Throwable $e) {
             //
         });

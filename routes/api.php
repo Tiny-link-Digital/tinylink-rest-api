@@ -19,4 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('url/index', [UrlController::class, 'index']);
+Route::post('url/create', [UrlController::class, 'create']);
+
+# Quando uma rota não é encontrada, enviar esse fallback ao cliente.
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'A rota solicitada não foi encontrada.'], 404);
+});
