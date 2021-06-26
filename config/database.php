@@ -37,10 +37,10 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'host' => env('MONGODB_HOST', '127.0.0.1'),
-            'port' => env('MONGODB_PORT', 27017),
-            'database' => env('MONGODB_DATABASE', 'tinylink'),
-            'username' => env('MONGODB_USERNAME', ''),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE', 'tinylink'),
+            'username' => env('DB_USERNAME', ''),
             'password' => env('MONGODB_PASSWORD', ''),
             'options' => [
                 // here you can pass more settings to the Mongo Driver Manager
