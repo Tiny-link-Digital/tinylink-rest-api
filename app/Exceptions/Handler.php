@@ -39,6 +39,10 @@ class Handler extends ExceptionHandler
             return response()->json($e->getErrorBody(), $e->getStatus());
         });
 
+        $this->renderable(function (UserException $e, $request) {
+            return response()->json($e->getErrorBody(), $e->getStatus());
+        });
+
         $this->renderable(function (\Exception $e, $request) {
             return response()->json([
                 'error' => true,
