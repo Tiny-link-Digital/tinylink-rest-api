@@ -10,7 +10,21 @@ use App\Models\Url;
 class UrlController extends Controller
 {
     /**
-     * Callback da rota /url/create
+     * Recupera uma URL baseado na sua respectiva hash.
+     *
+     * @param string $hash
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function get(string $hash)
+    {
+        $url = Url::where('hash', '=', $hash)->first();
+
+        return response()->json($url);
+    }
+
+    /**
+     * Gera uma nova URL encurtada.
      *
      * @param Request $request
      *
@@ -54,7 +68,7 @@ class UrlController extends Controller
     }
 
     /**
-     * Gera uma hash de 6 caracteres baseada em uma URL.
+     * Lógica de geração da hash da URL encurtada.
      *
      * @param string $url
      * @param int $step
@@ -66,15 +80,12 @@ class UrlController extends Controller
     {
         $hash = "";
 
-        # Criptografando a junção da URL com a data e hora atual do servidor.
         $now = Carbon::now()->toDateTimeString();
         $url_encrypted = md5($url.$now);
 
-        # Criando array que soletra a criptografia acima.
         $encryption_letters = str_split($url_encrypted);
         $encryption_length = count($encryption_letters);
 
-        # Mapeando 6 caracteres da criptografia acima, de forma aleatória, e sem repetir os índices.
         $rand_index_history = [];
         $counter = 0;
         while ($counter < 6) {

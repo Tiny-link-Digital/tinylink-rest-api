@@ -15,11 +15,9 @@ use App\Http\Controllers\UrlController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('url/create', [UrlController::class, 'create']);
+
+Route::get('url/{hash}', [UrlController::class, 'get']);
 
 # Quando uma rota não é encontrada, enviar esse fallback ao cliente.
 Route::fallback(function(){
