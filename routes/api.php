@@ -18,6 +18,7 @@ use App\Http\Controllers\UserController;
 
 Route::prefix('url')->group(function () {
     Route::post('/create', [UrlController::class, 'create']);
+    Route::get('/list', [UrlController::class, 'list']);
     Route::get('/{hash}', [UrlController::class, 'get']);
 });
 

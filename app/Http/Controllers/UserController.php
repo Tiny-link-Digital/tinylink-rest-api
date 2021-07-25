@@ -39,6 +39,7 @@ class UserController extends Controller
             $User->email = $payload['email'];
             $User->name = $payload['name'];
             $User->picture = $payload['picture'];
+            $User->app_key = $User->updateAppKey();
 
             $User->save();
         }

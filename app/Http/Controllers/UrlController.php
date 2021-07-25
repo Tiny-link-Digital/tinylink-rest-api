@@ -57,4 +57,16 @@ class UrlController extends Controller
         # Montando estrutura do array de resposta.
         return response()->json($Url);
     }
+
+    /**
+     * Lista as url's geradas por determinado usuário.
+     */
+    public function list(Request $request)
+    {
+        $User = User::validateAppKey($request);
+
+        $urls = Url::where('user_id', '=', $User->id)->paginate(9);
+
+        return response()->json($urls);
+    }
 }

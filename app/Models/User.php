@@ -14,11 +14,9 @@ class User extends Model
     /**
      * Atualiza a chave de login do usuário.
      *
-     * @param string $id
-     *
      * @return void
      */
-    public function updateAppKey(string $id)
+    public function updateAppKey()
     {
         $app_key = uniqid();
 
