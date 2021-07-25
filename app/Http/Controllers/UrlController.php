@@ -18,9 +18,9 @@ class UrlController extends Controller
      */
     public function get(string $hash)
     {
-        $url = Url::where('hash', '=', $hash)->first();
+        $Url = Url::where('hash', '=', $hash)->first();
 
-        return response()->json($url);
+        return response()->json($Url);
     }
 
     /**
@@ -44,18 +44,18 @@ class UrlController extends Controller
         }
 
         # Cadastrando uma nova url encurtada.
-        $url = new Url();
-        $url->url = $params['url'];
-        $url->hash = $url->getHash();
-        $url->expires_at = $url->getExpirationDate();
-        $url->save();
+        $Url = new Url();
+        $Url->url = $params['url'];
+        $Url->hash = $Url->getHash();
+        $Url->expires_at = $Url->getExpirationDate();
+        $Url->save();
 
         # Montando estrutura do array de resposta.
         $response = [
-            'hash' => $url->hash,
-            'url' => $url->url,
-            'created_at' => $url->created_at->toDateTimeString(),
-            'expires_at' => $url->expires_at->toDateTimeString()
+            'hash' => $Url->hash,
+            'url' => $Url->url,
+            'created_at' => $Url->created_at->toDateTimeString(),
+            'expires_at' => $Url->expires_at->toDateTimeString()
         ];
 
         return response()->json($response);
