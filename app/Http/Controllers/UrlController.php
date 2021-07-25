@@ -43,95 +43,21 @@ class UrlController extends Controller
             throw new UrlException('not_an_valid_url', 400);
         }
 
-        # Gerando uma nova hash
-        $hash = "";
-        while ($hash === "") {
-            $hash = $this->createHash($params['url']);
-        }
-
         # Cadastrando uma nova url encurtada.
         $url = new Url();
         $url->url = $params['url'];
-        $url->hash = $hash;
-        $url->expires_at = $this->getExpirationDate();
+        $url->hash = $url->getHash();
+        $url->expires_at = $url->getExpirationDate();
         $url->save();
 
         # Montando estrutura do array de resposta.
         $response = [
             'hash' => $url->hash,
-            'url' => $params['url'],
+            'url' => $url->url,
             'created_at' => $url->created_at->toDateTimeString(),
             'expires_at' => $url->expires_at->toDateTimeString()
         ];
 
         return response()->json($response);
-    }
-
-    /**
-     * Lógica de geração da hash da URL encurtada.
-     *
-     * @param string $url
-     * @param int $step
-     * @param string $_id
-     *
-     * @return string
-     */
-    private function createHash(string $url): string
-    {
-        $hash = "";
-
-        $now = Carbon::now()->toDateTimeString();
-        $url_encrypted = md5($url.$now);
-
-        $encryption_letters = str_split($url_encrypted);
-        $encryption_length = count($encryption_letters);
-
-        $rand_index_history = [];
-        $counter = 0;
-        while ($counter < 6) {
-            $rand_index = rand(1, $encryption_length) - 1;
-
-            if (!in_array($rand_index, $rand_index_history)) {
-                $hash .= $encryption_letters[$rand_index];
-
-                array_push($rand_index_history, $rand_index);
-
-                $counter++;
-            }
-        }
-
-        return $this->checkHashUniquity($hash);
-    }
-
-    /**
-     * Retorna a data de expiração dessa URL.
-     *
-     * @return Illuminate\Support\Carbon
-     */
-    private function getExpirationDate(): Carbon
-    {
-        $expiration_date = new Carbon();
-
-        $expiration_date->addYears(1);
-
-        return $expiration_date;
-    }
-
-    /**
-     * Verifica se o hash gerado é único.
-     *
-     * @param string $hash
-     *
-     * @return string
-     */
-    private function checkHashUniquity(string $hash): string
-    {
-        $repeated_hash = Url::where('hash', '=', $hash)->get();
-
-        if (count($repeated_hash) > 0) {
-            return "";
-        }
-
-        return $hash;
     }
 }
