@@ -65,7 +65,7 @@ Vale ressaltar que essa credencial é renovada a cada novo processo de login, ex
 ```
 
 ## Listar as URL's de determinado usuário
-### *GET /url/list?page=1
+### *GET /api/url/list?page=1
 ```json
 //Response
 {
