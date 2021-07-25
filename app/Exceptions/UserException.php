@@ -24,6 +24,16 @@ class UserException extends Exception
         switch ($this->code) {
             case 'user_not_found' :
                 return $this->buildResponseArray('Usuário não encontrado.');
+
+            case 'empty_auth_header' :
+                return $this->buildResponseArray('O cabeçalho de autorização não foi encontrado na requisição.');
+
+            case 'wrong_auth_format' :
+                return $this->buildResponseArray('O cabeçalho de autorização foi enviado em um formato inválido.');
+
+            case 'user_does_not_exists' :
+                return $this->buildResponseArray('Não foi encontrado nenhum usuário com esse token de autenticação.');
+
             default :
                 return $this->buildResponseArray('Erro desconhecido.');
         }

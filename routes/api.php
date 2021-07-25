@@ -19,7 +19,7 @@ use App\Http\Controllers\UserController;
 Route::post('url/create', [UrlController::class, 'create']);
 Route::get('url/{hash}', [UrlController::class, 'get']);
 
-Route::post('user/register', [UserController::class, 'register']);
+Route::post('user/signin', [UserController::class, 'signIn']);
 
 # Quando uma rota não é encontrada, enviar esse fallback ao cliente.
 Route::fallback(function(){

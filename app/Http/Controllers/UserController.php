@@ -9,23 +9,12 @@ use App\Models\User;
 class UserController extends Controller
 {
     /**
-     * Recupera um usuário.
-     *
-     * @param array $payload
-     */
-    private function get(array $payload)
-    {
-        $user = User::where('id', '=', $payload['sub'])->first();
-
-        return $user;
-    }
-
-    /**
-     * Integra com a API de Login Social do Google, e registra um novo usuário no banco.
+     * Realiza o login social de um usuário, caso seja o primeiro,
+     * registra o novo usuário no banco.
      *
      * @see https://developers.google.com/identity/sign-in/web/backend-auth
      */
-    public function register(Request $request)
+    public function signIn(Request $request)
     {
         $Google_Client = new \Google_Client([
             'client_id' => env('GOOGLE_CLIENT_ID')
@@ -41,22 +30,23 @@ class UserController extends Controller
             throw new UserException('user_wrong_client_id', 403);
         }
 
-        $user = $this->get($payload);
+        $User = User::where('id', '=', $payload['sub'])->first();
 
-        if ($user == false) {
-            $user = new User();
+        if (empty($User)) {
+            $User = new User();
 
-            $user->id = $payload['sub'];
-            $user->email = $payload['email'];
-            $user->name = $payload['name'];
-            $user->picture = $payload['picture'];
+            $User->id = $payload['sub'];
+            $User->email = $payload['email'];
+            $User->name = $payload['name'];
+            $User->picture = $payload['picture'];
 
-            $user->save();
+            $User->save();
         }
 
         return response()->json([
             'success' => true,
-            'unique_id' => $user->id
+            'app_key' => $User->updateAppKey($payload['sub']),
+            'unique_id' => $User->id
         ]);
     }
 }
