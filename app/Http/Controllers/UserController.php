@@ -43,10 +43,6 @@ class UserController extends Controller
             $User->save();
         }
 
-        return response()->json([
-            'success' => true,
-            'app_key' => $User->updateAppKey($payload['sub']),
-            'unique_id' => $User->id
-        ]);
+        return response()->json($User);
     }
 }

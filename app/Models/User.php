@@ -36,7 +36,7 @@ class User extends Model
      *
      * @return void
      */
-    public function validateAppKey(Request $request)
+    public static function validateAppKey(Request $request): User
     {
         $auth_header = $request->header('Authorization');
 

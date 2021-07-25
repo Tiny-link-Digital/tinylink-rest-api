@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Exceptions\UrlException;
 use App\Models\Url;
+use App\Models\User;
 
 class UrlController extends Controller
 {
@@ -32,6 +33,8 @@ class UrlController extends Controller
      */
     public function create(Request $request)
     {
+        $User = User::validateAppKey($request);
+
         $params = [
             'url' => $request->get('url')
         ];
@@ -45,19 +48,13 @@ class UrlController extends Controller
 
         # Cadastrando uma nova url encurtada.
         $Url = new Url();
+        $Url->user_id = $User->id;
         $Url->url = $params['url'];
         $Url->hash = $Url->getHash();
         $Url->expires_at = $Url->getExpirationDate();
         $Url->save();
 
         # Montando estrutura do array de resposta.
-        $response = [
-            'hash' => $Url->hash,
-            'url' => $Url->url,
-            'created_at' => $Url->created_at->toDateTimeString(),
-            'expires_at' => $Url->expires_at->toDateTimeString()
-        ];
-
-        return response()->json($response);
+        return response()->json($Url);
     }
 }
