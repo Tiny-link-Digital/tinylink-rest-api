@@ -1,0 +1,39 @@
+version: "3"
+
+networks:
+  laravel:
+
+volumes:
+  tinylink_db_data:
+
+services:
+  laravel-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tiny_link_server
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+  mysql:
+    image: mysql:5.7
+    container_name: tiny_link_db
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: tiny_link_db
+      MYSQL_USER: lelouch
+      MYSQL_PASSWORD: SolidSn4kePa$$
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - tinylink_db_data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d/init.sql
+
+    networks:
+      - laravel
